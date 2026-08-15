@@ -31,6 +31,9 @@ public:
     const Course* findCourse(const std::string& code) const;
     std::string formatEnrollmentList() const;
     int enrolledCreditTotal() const;
+    double computeGpa() const;
+    std::string formatGpaSummary() const;
+    static double letterToPoints(const std::string& letterGrade);
 
 private:
     std::vector<Course> courses_;

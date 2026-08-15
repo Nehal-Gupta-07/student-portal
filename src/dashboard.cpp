@@ -1,5 +1,6 @@
 #include "dashboard.h"
 
+#include <iomanip>
 #include <sstream>
 
 DashboardService::DashboardService() {
@@ -62,6 +63,61 @@ int DashboardService::enrolledCreditTotal() const {
         }
     }
     return total;
+}
+
+double DashboardService::letterToPoints(const std::string& letterGrade) {
+    if (letterGrade == "A" || letterGrade == "A+") {
+        return 10.0;
+    }
+    if (letterGrade == "A-") {
+        return 9.0;
+    }
+    if (letterGrade == "B+") {
+        return 8.0;
+    }
+    if (letterGrade == "B") {
+        return 7.0;
+    }
+    if (letterGrade == "B-") {
+        return 6.0;
+    }
+    if (letterGrade == "C+") {
+        return 5.0;
+    }
+    if (letterGrade == "C") {
+        return 4.0;
+    }
+    if (letterGrade == "D") {
+        return 2.0;
+    }
+    return 0.0;
+}
+
+double DashboardService::computeGpa() const {
+    double weighted = 0.0;
+    int credits = 0;
+    for (const Enrollment& enrollment : enrollments_) {
+        const Course* course = findCourse(enrollment.courseCode);
+        if (course == nullptr || course->credits <= 0) {
+            continue;
+        }
+        weighted += letterToPoints(enrollment.letterGrade) * course->credits;
+        credits += course->credits;
+    }
+    if (credits == 0) {
+        return 0.0;
+    }
+    return weighted / credits;
+}
+
+std::string DashboardService::formatGpaSummary() const {
+    std::ostringstream out;
+    out << std::fixed << std::setprecision(2);
+    out << "GPA summary (10-point scale)\n"
+        << "Courses counted: " << enrollments_.size() << "\n"
+        << "Credits counted: " << enrolledCreditTotal() << "\n"
+        << "GPA: " << computeGpa() << "\n";
+    return out.str();
 }
 
 void DashboardService::seedSampleData() {
