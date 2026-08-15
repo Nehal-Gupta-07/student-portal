@@ -1,5 +1,6 @@
 # Student Portal
 
+
 Student Portal is a command-line C++ application for managing a student's academic account. Version 1.0 is the first supported release of the rebuilt portal (login, profile, dashboard, settings, and help).
 
 ## Features
