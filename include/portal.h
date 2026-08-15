@@ -23,9 +23,6 @@ private:
     void updateDepartment();
     void updateYear();
     void checkValidity() const;
-
-    static void discardRestOfLine();
-    static std::string readLine(const std::string& prompt);
 };
 
 #endif

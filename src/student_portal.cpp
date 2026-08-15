@@ -1,7 +1,8 @@
 #include "portal.h"
 
+#include "console_io.h"
+
 #include <iostream>
-#include <limits>
 #include <string>
 
 Portal::Portal()
@@ -69,14 +70,11 @@ void Portal::printMenu() const {
 }
 
 int Portal::readMenuChoice() const {
-    std::cout << "Enter choice: ";
-    int choice = 0;
-    if (!(std::cin >> choice)) {
-        std::cin.clear();
-        discardRestOfLine();
+    bool ok = false;
+    const int choice = console::readInt("Enter choice: ", ok);
+    if (!ok) {
         return -1;
     }
-    discardRestOfLine();
     return choice;
 }
 
@@ -86,7 +84,7 @@ void Portal::viewStudent() const {
 }
 
 void Portal::updateName() {
-    if (!student_.setName(readLine("New name: "))) {
+    if (!student_.setName(console::readLine("New name: "))) {
         std::cout << "Name cannot be empty.\n";
     } else {
         std::cout << "Name updated.\n";
@@ -94,7 +92,7 @@ void Portal::updateName() {
 }
 
 void Portal::updateEmail() {
-    if (!student_.setEmail(readLine("New email: "))) {
+    if (!student_.setEmail(console::readLine("New email: "))) {
         std::cout << "Email must look like name@domain.tld\n";
     } else {
         std::cout << "Email updated.\n";
@@ -102,7 +100,7 @@ void Portal::updateEmail() {
 }
 
 void Portal::updatePhone() {
-    if (!student_.setPhone(readLine("New phone: "))) {
+    if (!student_.setPhone(console::readLine("New phone: "))) {
         std::cout << "Phone must have at least 10 digits.\n";
     } else {
         std::cout << "Phone updated.\n";
@@ -110,7 +108,7 @@ void Portal::updatePhone() {
 }
 
 void Portal::updateDepartment() {
-    if (!student_.setDepartment(readLine("New department: "))) {
+    if (!student_.setDepartment(console::readLine("New department: "))) {
         std::cout << "Department cannot be empty.\n";
     } else {
         std::cout << "Department updated.\n";
@@ -118,15 +116,12 @@ void Portal::updateDepartment() {
 }
 
 void Portal::updateYear() {
-    std::cout << "New year (1-5): ";
-    int year = 0;
-    if (!(std::cin >> year)) {
-        std::cin.clear();
-        discardRestOfLine();
+    bool ok = false;
+    const int year = console::readInt("New year (1-5): ", ok);
+    if (!ok) {
         std::cout << "Year must be a number.\n";
         return;
     }
-    discardRestOfLine();
     if (!student_.setYear(year)) {
         std::cout << "Year must be between 1 and 5.\n";
     } else {
@@ -137,15 +132,4 @@ void Portal::updateYear() {
 void Portal::checkValidity() const {
     std::cout << (student_.isValid() ? "Record is complete and valid.\n"
                                     : "Record is missing or invalid fields.\n");
-}
-
-void Portal::discardRestOfLine() {
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
-
-std::string Portal::readLine(const std::string& prompt) {
-    std::cout << prompt;
-    std::string value;
-    std::getline(std::cin, value);
-    return value;
 }
