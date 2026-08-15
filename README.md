@@ -33,3 +33,14 @@ After a successful build:
 ```
 
 On Windows Command Prompt you can also run `student-portal.exe`. The program prints a welcome message, greets the user, and shows a sample sum. Later parts replace this with a menu-driven portal.
+
+## Repository layout
+
+```text
+student-portal/
+  main.cpp       Legacy entry point (to be expanded)
+  README.md      Setup and usage guide
+  .gitignore     Build artifacts, IDE files, and runtime data
+```
+
+Source files will later move into `src/` and `include/` as the portal grows.
