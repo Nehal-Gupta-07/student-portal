@@ -1,0 +1,42 @@
+# Compiled binaries and object files
+*.exe
+*.o
+*.obj
+*.out
+*.a
+*.lib
+*.so
+*.dll
+*.pdb
+*.ilk
+*.exp
+
+# Build output
+/build/
+/bin/
+/out/
+/Debug/
+/Release/
+
+# Runtime data created by the portal
+*.log
+session.dat
+users.dat
+profiles.dat
+settings.dat
+
+# IDE and editor files
+.vscode/
+.idea/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
