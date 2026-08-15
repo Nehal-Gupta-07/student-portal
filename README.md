@@ -13,3 +13,13 @@ Student Portal is a command-line C++ application for managing a student's academ
 
 - A C++ compiler that supports C++17 (`g++` from MinGW-w64, MSYS2, or WSL)
 - Git
+
+## Build
+
+From the `student-portal` directory:
+
+```bash
+g++ -std=c++17 -o student-portal main.cpp
+```
+
+This produces `student-portal.exe` on Windows, or `student-portal` on Linux/macOS. Object files and binaries are ignored by Git.
