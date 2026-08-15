@@ -47,6 +47,8 @@ On Windows Command Prompt you can also run `student-portal.exe`. Sign in before 
 
 Three failed sign-in attempts lock the login for the rest of that program run. Restart the portal to try again.
 
+Menu option 14 opens Help, which works without signing in.
+
 ## Repository layout
 
 ```text
