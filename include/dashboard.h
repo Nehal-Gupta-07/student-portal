@@ -33,6 +33,7 @@ public:
     int enrolledCreditTotal() const;
     double computeGpa() const;
     std::string formatGpaSummary() const;
+    std::string formatAnnouncementFeed() const;
     static double letterToPoints(const std::string& letterGrade);
 
 private:

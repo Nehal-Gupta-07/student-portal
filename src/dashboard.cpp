@@ -120,6 +120,22 @@ std::string DashboardService::formatGpaSummary() const {
     return out.str();
 }
 
+std::string DashboardService::formatAnnouncementFeed() const {
+    std::ostringstream out;
+    out << "Announcements\n"
+        << "-------------\n";
+    if (announcements_.empty()) {
+        out << "(no announcements)\n";
+        return out.str();
+    }
+    for (std::size_t i = announcements_.size(); i > 0; --i) {
+        const Announcement& item = announcements_[i - 1];
+        out << "[" << item.postedOn << "] " << item.title << "\n"
+            << item.body << "\n\n";
+    }
+    return out.str();
+}
+
 void DashboardService::seedSampleData() {
     courses_.clear();
     courses_.push_back(Course{"CS101", "Introduction to Programming", 4});
