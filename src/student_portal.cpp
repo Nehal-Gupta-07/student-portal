@@ -227,7 +227,7 @@ void Portal::editProfileMenu() {
 void Portal::updateProfileName() {
     const std::string name = console::readLine("New display name: ");
     if (!profile_.setDisplayName(name)) {
-        std::cout << "Display name cannot be empty.\n";
+        std::cout << "Display name must be at least 2 characters and not only spaces.\n";
         return;
     }
     student_.setName(name);
@@ -237,7 +237,7 @@ void Portal::updateProfileName() {
 void Portal::updateProfileEmail() {
     const std::string email = console::readLine("New email: ");
     if (!profile_.setEmail(email)) {
-        std::cout << "Email cannot be empty.\n";
+        std::cout << "Email must look like name@domain.tld\n";
         return;
     }
     student_.setEmail(email);
@@ -247,7 +247,7 @@ void Portal::updateProfileEmail() {
 void Portal::updateProfilePhone() {
     const std::string phone = console::readLine("New phone: ");
     if (!profile_.setPhone(phone)) {
-        std::cout << "Phone cannot be empty.\n";
+        std::cout << "Phone must have at least 10 digits.\n";
         return;
     }
     student_.setPhone(phone);
@@ -256,7 +256,7 @@ void Portal::updateProfilePhone() {
 
 void Portal::updateProfileAddress() {
     if (!profile_.setAddress(console::readLine("New address: "))) {
-        std::cout << "Address cannot be empty.\n";
+        std::cout << "Address must be at least 5 characters.\n";
     } else {
         std::cout << "Address updated.\n";
     }
@@ -264,7 +264,7 @@ void Portal::updateProfileAddress() {
 
 void Portal::updateProfileBio() {
     if (!profile_.setBio(console::readLine("New bio: "))) {
-        std::cout << "Bio cannot be empty.\n";
+        std::cout << "Bio must be between 10 and 280 characters.\n";
     } else {
         std::cout << "Bio updated.\n";
     }

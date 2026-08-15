@@ -1,5 +1,6 @@
 #include "profile.h"
 
+#include <cctype>
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -81,7 +82,7 @@ std::string ProfileService::toDisplayString() const {
 }
 
 bool ProfileService::setDisplayName(const std::string& name) {
-    if (name.empty()) {
+    if (!isValidDisplayName(name)) {
         return false;
     }
     profile_.displayName = name;
@@ -90,7 +91,7 @@ bool ProfileService::setDisplayName(const std::string& name) {
 }
 
 bool ProfileService::setEmail(const std::string& email) {
-    if (email.empty()) {
+    if (!isValidEmail(email)) {
         return false;
     }
     profile_.email = email;
@@ -99,7 +100,7 @@ bool ProfileService::setEmail(const std::string& email) {
 }
 
 bool ProfileService::setPhone(const std::string& phone) {
-    if (phone.empty()) {
+    if (!isValidPhone(phone)) {
         return false;
     }
     profile_.phone = phone;
@@ -108,7 +109,7 @@ bool ProfileService::setPhone(const std::string& phone) {
 }
 
 bool ProfileService::setAddress(const std::string& address) {
-    if (address.empty()) {
+    if (!isValidAddress(address)) {
         return false;
     }
     profile_.address = address;
@@ -117,12 +118,40 @@ bool ProfileService::setAddress(const std::string& address) {
 }
 
 bool ProfileService::setBio(const std::string& bio) {
-    if (bio.empty()) {
+    if (!isValidBio(bio)) {
         return false;
     }
     profile_.bio = bio;
     persistCurrent();
     return true;
+}
+
+bool ProfileService::isValidDisplayName(const std::string& name) {
+    if (name.size() < 2) {
+        return false;
+    }
+    for (char ch : name) {
+        if (!std::isspace(static_cast<unsigned char>(ch))) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ProfileService::isValidEmail(const std::string& email) {
+    return Student::isValidEmail(email);
+}
+
+bool ProfileService::isValidPhone(const std::string& phone) {
+    return Student::isValidPhone(phone);
+}
+
+bool ProfileService::isValidAddress(const std::string& address) {
+    return address.size() >= 5;
+}
+
+bool ProfileService::isValidBio(const std::string& bio) {
+    return bio.size() >= 10 && bio.size() <= 280;
 }
 
 void ProfileService::loadStore() {

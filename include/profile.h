@@ -35,6 +35,12 @@ public:
     bool setAddress(const std::string& address);
     bool setBio(const std::string& bio);
 
+    static bool isValidDisplayName(const std::string& name);
+    static bool isValidEmail(const std::string& email);
+    static bool isValidPhone(const std::string& phone);
+    static bool isValidAddress(const std::string& address);
+    static bool isValidBio(const std::string& bio);
+
 private:
     ProfileRecord profile_;
     std::vector<ProfileRecord> records_;
