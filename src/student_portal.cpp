@@ -17,25 +17,45 @@ void Portal::run() {
         printMenu();
         switch (readMenuChoice()) {
             case 1:
-                viewStudent();
+                promptLogin();
                 break;
             case 2:
-                updateName();
+                promptLogout();
                 break;
             case 3:
-                updateEmail();
+                if (requireLogin()) {
+                    viewStudent();
+                }
                 break;
             case 4:
-                updatePhone();
+                if (requireLogin()) {
+                    updateName();
+                }
                 break;
             case 5:
-                updateDepartment();
+                if (requireLogin()) {
+                    updateEmail();
+                }
                 break;
             case 6:
-                updateYear();
+                if (requireLogin()) {
+                    updatePhone();
+                }
                 break;
             case 7:
-                checkValidity();
+                if (requireLogin()) {
+                    updateDepartment();
+                }
+                break;
+            case 8:
+                if (requireLogin()) {
+                    updateYear();
+                }
+                break;
+            case 9:
+                if (requireLogin()) {
+                    checkValidity();
+                }
                 break;
             case 0:
                 running = false;
@@ -54,18 +74,31 @@ const Student& Portal::currentStudent() const {
 
 void Portal::printWelcome() const {
     std::cout << "Welcome to Student Portal\n"
-              << "Loaded sample record for " << student_.getName() << ".\n";
+              << "Loaded " << login_.accountCount()
+              << " account(s) from the local user store.\n";
+    if (login_.isAuthenticated()) {
+        std::cout << "Restored session for " << login_.session().username << ".\n";
+    } else {
+        std::cout << "Sign in before viewing or editing a student record.\n";
+    }
 }
 
 void Portal::printMenu() const {
-    std::cout << "\n===== Student Portal =====\n"
-              << "1. View student record\n"
-              << "2. Update name\n"
-              << "3. Update email\n"
-              << "4. Update phone\n"
-              << "5. Update department\n"
-              << "6. Update year\n"
-              << "7. Check record validity\n"
+    std::cout << "\n===== Student Portal =====\n";
+    if (login_.isAuthenticated()) {
+        std::cout << "Signed in as " << login_.session().username << "\n";
+    } else {
+        std::cout << "Not signed in\n";
+    }
+    std::cout << "1. Sign in\n"
+              << "2. Sign out\n"
+              << "3. View student record\n"
+              << "4. Update name\n"
+              << "5. Update email\n"
+              << "6. Update phone\n"
+              << "7. Update department\n"
+              << "8. Update year\n"
+              << "9. Check record validity\n"
               << "0. Exit\n";
 }
 
@@ -76,6 +109,52 @@ int Portal::readMenuChoice() const {
         return -1;
     }
     return choice;
+}
+
+bool Portal::requireLogin() const {
+    if (login_.isAuthenticated()) {
+        return true;
+    }
+    std::cout << "Please sign in first.\n";
+    return false;
+}
+
+void Portal::promptLogin() {
+    if (login_.isAuthenticated()) {
+        std::cout << "Already signed in as " << login_.session().username << ".\n";
+        return;
+    }
+    if (login_.isLocked()) {
+        std::cout << "Sign-in is locked after " << LoginService::kMaxFailedAttempts
+                  << " failed attempts. Close the program and start it again to retry.\n";
+        return;
+    }
+
+    Credentials credentials;
+    credentials.username = console::readLine("Username: ");
+    credentials.password = console::readLine("Password: ");
+
+    if (login_.login(credentials)) {
+        std::cout << "Signed in as " << login_.session().username << ".\n";
+        return;
+    }
+
+    if (login_.isLocked()) {
+        std::cout << "Too many failed attempts. Sign-in is now locked until you restart the program.\n";
+        return;
+    }
+
+    std::cout << "Sign-in failed. " << login_.remainingAttempts()
+              << " attempt(s) remaining.\n";
+}
+
+void Portal::promptLogout() {
+    if (!login_.isAuthenticated()) {
+        std::cout << "You are not signed in.\n";
+        return;
+    }
+    login_.logout();
+    std::cout << "Signed out.\n";
 }
 
 void Portal::viewStudent() const {
