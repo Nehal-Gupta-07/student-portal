@@ -19,7 +19,7 @@ Student Portal is a command-line C++ application for managing a student's academ
 From the `student-portal` directory:
 
 ```bash
-g++ -std=c++17 -o student-portal main.cpp
+g++ -std=c++17 -o student-portal main.cpp student.cpp portal.cpp
 ```
 
 This produces `student-portal.exe` on Windows, or `student-portal` on Linux/macOS. Object files and binaries are ignored by Git.
@@ -32,13 +32,17 @@ After a successful build:
 ./student-portal
 ```
 
-On Windows Command Prompt you can also run `student-portal.exe`. The program prints a welcome message, greets the user, and shows a sample sum. Later parts replace this with a menu-driven portal.
+On Windows Command Prompt you can also run `student-portal.exe`. The portal loads a sample student record and opens a menu to view or edit profile fields.
 
 ## Repository layout
 
 ```text
 student-portal/
-  main.cpp       Legacy entry point (to be expanded)
+  main.cpp       Program entry point
+  student.h      Student data model
+  student.cpp    Student field validation
+  portal.h       Portal application class
+  portal.cpp     Menu loop and profile actions
   README.md      Setup and usage guide
   .gitignore     Build artifacts, IDE files, and runtime data
 ```
