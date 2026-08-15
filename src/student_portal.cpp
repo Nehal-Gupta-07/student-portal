@@ -8,7 +8,9 @@
 Portal::Portal()
     : student_(1001, "Nehal Kumar", "nehal.kumar@university.edu", "9876543210",
                "Computer Science", 2),
-      profile_(student_) {}
+      profile_(student_) {
+    loadProfileForSession();
+}
 
 void Portal::run() {
     printWelcome();
@@ -149,6 +151,7 @@ void Portal::promptLogin() {
 
     if (login_.login(credentials)) {
         std::cout << "Signed in as " << login_.session().username << ".\n";
+        loadProfileForSession();
         return;
     }
 
@@ -168,6 +171,16 @@ void Portal::promptLogout() {
     }
     login_.logout();
     std::cout << "Signed out.\n";
+}
+
+void Portal::loadProfileForSession() {
+    if (!login_.isAuthenticated()) {
+        return;
+    }
+    profile_.ensureProfile(login_.session().studentId, student_);
+    student_.setName(profile_.current().displayName);
+    student_.setEmail(profile_.current().email);
+    student_.setPhone(profile_.current().phone);
 }
 
 void Portal::viewProfile() const {

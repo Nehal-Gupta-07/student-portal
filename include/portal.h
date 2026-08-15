@@ -23,6 +23,7 @@ private:
     bool requireLogin() const;
     void promptLogin();
     void promptLogout();
+    void loadProfileForSession();
     void viewProfile() const;
     void editProfileMenu();
     void updateProfileName();

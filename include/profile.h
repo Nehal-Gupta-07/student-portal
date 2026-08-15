@@ -2,6 +2,7 @@
 #define PROFILE_H
 
 #include <string>
+#include <vector>
 
 #include "student.h"
 
@@ -16,11 +17,16 @@ struct ProfileRecord {
 
 class ProfileService {
 public:
+    static const char* kProfileStorePath;
+
     ProfileService();
     explicit ProfileService(const Student& student);
 
     const ProfileRecord& current() const;
     void loadFromStudent(const Student& student);
+    void ensureProfile(int studentId, const Student& fallback);
+    bool selectByStudentId(int studentId);
+    bool persistCurrent();
     std::string toDisplayString() const;
 
     bool setDisplayName(const std::string& name);
@@ -31,6 +37,13 @@ public:
 
 private:
     ProfileRecord profile_;
+    std::vector<ProfileRecord> records_;
+
+    void loadStore();
+    bool saveStore() const;
+    void upsertCurrent();
+    static std::string sanitize(const std::string& value);
+    static bool parseRecord(const std::string& line, ProfileRecord& record);
 };
 
 #endif
