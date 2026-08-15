@@ -35,6 +35,7 @@ public:
     bool isAuthenticated() const;
     bool isLocked() const;
     int failedAttempts() const;
+    int remainingAttempts() const;
     const Session& session() const;
     std::size_t accountCount() const;
 

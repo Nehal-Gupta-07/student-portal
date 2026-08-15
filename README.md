@@ -44,6 +44,8 @@ On Windows Command Prompt you can also run `student-portal.exe`. Sign in before 
 - `nehal` / `portal123`
 - `student` / `student123`
 
+Three failed sign-in attempts lock the login for the rest of that program run. Restart the portal to try again.
+
 ## Repository layout
 
 ```text

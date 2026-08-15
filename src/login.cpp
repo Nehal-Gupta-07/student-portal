@@ -53,6 +53,13 @@ int LoginService::failedAttempts() const {
     return failedAttempts_;
 }
 
+int LoginService::remainingAttempts() const {
+    if (failedAttempts_ >= kMaxFailedAttempts) {
+        return 0;
+    }
+    return kMaxFailedAttempts - failedAttempts_;
+}
+
 const Session& LoginService::session() const {
     return session_;
 }

@@ -124,6 +124,11 @@ void Portal::promptLogin() {
         std::cout << "Already signed in as " << login_.session().username << ".\n";
         return;
     }
+    if (login_.isLocked()) {
+        std::cout << "Sign-in is locked after " << LoginService::kMaxFailedAttempts
+                  << " failed attempts. Close the program and start it again to retry.\n";
+        return;
+    }
 
     Credentials credentials;
     credentials.username = console::readLine("Username: ");
@@ -131,9 +136,16 @@ void Portal::promptLogin() {
 
     if (login_.login(credentials)) {
         std::cout << "Signed in as " << login_.session().username << ".\n";
-    } else {
-        std::cout << "Sign-in failed. Check the username and password.\n";
+        return;
     }
+
+    if (login_.isLocked()) {
+        std::cout << "Too many failed attempts. Sign-in is now locked until you restart the program.\n";
+        return;
+    }
+
+    std::cout << "Sign-in failed. " << login_.remainingAttempts()
+              << " attempt(s) remaining.\n";
 }
 
 void Portal::promptLogout() {
