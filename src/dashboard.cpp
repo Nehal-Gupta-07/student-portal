@@ -1,5 +1,7 @@
 #include "dashboard.h"
 
+#include <sstream>
+
 DashboardService::DashboardService() {
     seedSampleData();
 }
@@ -23,6 +25,43 @@ const Course* DashboardService::findCourse(const std::string& code) const {
         }
     }
     return nullptr;
+}
+
+std::string DashboardService::formatEnrollmentList() const {
+    std::ostringstream out;
+    out << "Code    Credits  Grade  Title\n"
+        << "------  -------  -----  -----\n";
+    if (enrollments_.empty()) {
+        out << "(no enrolled courses)\n";
+        return out.str();
+    }
+    for (const Enrollment& enrollment : enrollments_) {
+        const Course* course = findCourse(enrollment.courseCode);
+        const std::string title = course != nullptr ? course->title : "Unknown course";
+        const int credits = course != nullptr ? course->credits : 0;
+        out << enrollment.courseCode;
+        if (enrollment.courseCode.size() < 8) {
+            out << std::string(8 - enrollment.courseCode.size(), ' ');
+        }
+        out << credits << "        " << enrollment.letterGrade;
+        if (enrollment.letterGrade.size() < 7) {
+            out << std::string(7 - enrollment.letterGrade.size(), ' ');
+        }
+        out << title << "\n";
+    }
+    out << "Total credits: " << enrolledCreditTotal() << "\n";
+    return out.str();
+}
+
+int DashboardService::enrolledCreditTotal() const {
+    int total = 0;
+    for (const Enrollment& enrollment : enrollments_) {
+        const Course* course = findCourse(enrollment.courseCode);
+        if (course != nullptr) {
+            total += course->credits;
+        }
+    }
+    return total;
 }
 
 void DashboardService::seedSampleData() {

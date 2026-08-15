@@ -29,6 +29,8 @@ public:
     const std::vector<Enrollment>& enrollments() const;
     const std::vector<Announcement>& announcements() const;
     const Course* findCourse(const std::string& code) const;
+    std::string formatEnrollmentList() const;
+    int enrolledCreditTotal() const;
 
 private:
     std::vector<Course> courses_;
