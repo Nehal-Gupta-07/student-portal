@@ -19,10 +19,10 @@ Student Portal is a command-line C++ application for managing a student's academ
 From the `student-portal` directory:
 
 ```bash
-g++ -std=c++17 -o student-portal main.cpp student.cpp portal.cpp
+g++ -std=c++17 -Iinclude -o student-portal src/main.cpp src/student.cpp src/portal.cpp
 ```
 
-This produces `student-portal.exe` on Windows, or `student-portal` on Linux/macOS. Object files and binaries are ignored by Git.
+This produces `student-portal.exe` on Windows, or `student-portal` on Linux/macOS. The `-Iinclude` flag lets source files keep `#include "student.h"` after the header move. Object files and binaries are ignored by Git.
 
 ## Run
 
@@ -38,13 +38,15 @@ On Windows Command Prompt you can also run `student-portal.exe`. The portal load
 
 ```text
 student-portal/
-  main.cpp       Program entry point
-  student.h      Student data model
-  student.cpp    Student field validation
-  portal.h       Portal application class
-  portal.cpp     Menu loop and profile actions
+  include/
+    student.h    Student data model
+    portal.h     Portal application class
+  src/
+    main.cpp     Program entry point
+    student.cpp  Student field validation
+    portal.cpp   Menu loop and profile actions
   README.md      Setup and usage guide
   .gitignore     Build artifacts, IDE files, and runtime data
 ```
 
-Source files will later move into `src/` and `include/` as the portal grows.
+Headers live in `include/` and implementations live in `src/` so the public API stays separate from the build sources.
