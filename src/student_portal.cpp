@@ -7,7 +7,8 @@
 
 Portal::Portal()
     : student_(1001, "Nehal Kumar", "nehal.kumar@university.edu", "9876543210",
-               "Computer Science", 2) {}
+               "Computer Science", 2),
+      profile_(student_) {}
 
 void Portal::run() {
     printWelcome();
@@ -24,35 +25,40 @@ void Portal::run() {
                 break;
             case 3:
                 if (requireLogin()) {
-                    viewStudent();
+                    viewProfile();
                 }
                 break;
             case 4:
                 if (requireLogin()) {
-                    updateName();
+                    viewStudent();
                 }
                 break;
             case 5:
                 if (requireLogin()) {
-                    updateEmail();
+                    updateName();
                 }
                 break;
             case 6:
                 if (requireLogin()) {
-                    updatePhone();
+                    updateEmail();
                 }
                 break;
             case 7:
                 if (requireLogin()) {
-                    updateDepartment();
+                    updatePhone();
                 }
                 break;
             case 8:
                 if (requireLogin()) {
-                    updateYear();
+                    updateDepartment();
                 }
                 break;
             case 9:
+                if (requireLogin()) {
+                    updateYear();
+                }
+                break;
+            case 10:
                 if (requireLogin()) {
                     checkValidity();
                 }
@@ -92,13 +98,14 @@ void Portal::printMenu() const {
     }
     std::cout << "1. Sign in\n"
               << "2. Sign out\n"
-              << "3. View student record\n"
-              << "4. Update name\n"
-              << "5. Update email\n"
-              << "6. Update phone\n"
-              << "7. Update department\n"
-              << "8. Update year\n"
-              << "9. Check record validity\n"
+              << "3. View profile\n"
+              << "4. View student record\n"
+              << "5. Update name\n"
+              << "6. Update email\n"
+              << "7. Update phone\n"
+              << "8. Update department\n"
+              << "9. Update year\n"
+              << "10. Check record validity\n"
               << "0. Exit\n";
 }
 
@@ -155,6 +162,11 @@ void Portal::promptLogout() {
     }
     login_.logout();
     std::cout << "Signed out.\n";
+}
+
+void Portal::viewProfile() const {
+    std::cout << "\n--- Student Profile ---\n"
+              << profile_.toDisplayString() << "\n";
 }
 
 void Portal::viewStudent() const {

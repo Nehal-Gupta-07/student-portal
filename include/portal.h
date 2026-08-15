@@ -2,6 +2,7 @@
 #define PORTAL_H
 
 #include "login.h"
+#include "profile.h"
 #include "student.h"
 
 class Portal {
@@ -14,6 +15,7 @@ public:
 private:
     Student student_;
     LoginService login_;
+    ProfileService profile_;
 
     void printWelcome() const;
     void printMenu() const;
@@ -21,6 +23,7 @@ private:
     bool requireLogin() const;
     void promptLogin();
     void promptLogout();
+    void viewProfile() const;
     void viewStudent() const;
     void updateName();
     void updateEmail();
