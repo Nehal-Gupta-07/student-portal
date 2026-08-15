@@ -70,6 +70,11 @@ void Portal::run() {
                     checkValidity();
                 }
                 break;
+            case 12:
+                if (requireLogin()) {
+                    dashboardMenu();
+                }
+                break;
             case 0:
                 running = false;
                 std::cout << "Goodbye.\n";
@@ -114,6 +119,7 @@ void Portal::printMenu() const {
               << "9. Update department\n"
               << "10. Update year\n"
               << "11. Check record validity\n"
+              << "12. Dashboard\n"
               << "0. Exit\n";
 }
 
@@ -324,4 +330,54 @@ void Portal::updateYear() {
 void Portal::checkValidity() const {
     std::cout << (student_.isValid() ? "Record is complete and valid.\n"
                                     : "Record is missing or invalid fields.\n");
+}
+
+void Portal::dashboardMenu() const {
+    bool viewing = true;
+    while (viewing) {
+        std::cout << "\n--- Dashboard ---\n"
+                  << "1. Enrolled courses\n"
+                  << "2. GPA summary\n"
+                  << "3. Announcements\n"
+                  << "4. Full dashboard\n"
+                  << "0. Back\n";
+        switch (readMenuChoice()) {
+            case 1:
+                viewEnrolledCourses();
+                break;
+            case 2:
+                viewGpaSummary();
+                break;
+            case 3:
+                viewAnnouncements();
+                break;
+            case 4:
+                viewFullDashboard();
+                break;
+            case 0:
+                viewing = false;
+                break;
+            default:
+                std::cout << "Unknown choice. Pick a menu number.\n";
+                break;
+        }
+    }
+}
+
+void Portal::viewEnrolledCourses() const {
+    std::cout << "\n" << dashboard_.formatEnrollmentList();
+}
+
+void Portal::viewGpaSummary() const {
+    std::cout << "\n" << dashboard_.formatGpaSummary();
+}
+
+void Portal::viewAnnouncements() const {
+    std::cout << "\n" << dashboard_.formatAnnouncementFeed();
+}
+
+void Portal::viewFullDashboard() const {
+    viewEnrolledCourses();
+    viewGpaSummary();
+    viewAnnouncements();
 }

@@ -1,6 +1,6 @@
 CXX := g++
 CXXFLAGS := -std=c++17 -Iinclude -Wall -Wextra
-SRCS := src/main.cpp src/student.cpp src/student_portal.cpp src/console_io.cpp src/login.cpp src/profile.cpp
+SRCS := src/main.cpp src/student.cpp src/student_portal.cpp src/console_io.cpp src/login.cpp src/profile.cpp src/dashboard.cpp
 TARGET := student-portal
 
 .PHONY: all clean

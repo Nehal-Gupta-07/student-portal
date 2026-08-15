@@ -1,6 +1,7 @@
 #ifndef PORTAL_H
 #define PORTAL_H
 
+#include "dashboard.h"
 #include "login.h"
 #include "profile.h"
 #include "student.h"
@@ -16,6 +17,7 @@ private:
     Student student_;
     LoginService login_;
     ProfileService profile_;
+    DashboardService dashboard_;
 
     void printWelcome() const;
     void printMenu() const;
@@ -38,6 +40,11 @@ private:
     void updateDepartment();
     void updateYear();
     void checkValidity() const;
+    void dashboardMenu() const;
+    void viewEnrolledCourses() const;
+    void viewGpaSummary() const;
+    void viewAnnouncements() const;
+    void viewFullDashboard() const;
 };
 
 #endif
