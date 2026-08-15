@@ -8,3 +8,8 @@ Student Portal is a command-line C++ application for managing a student's academ
 - View and edit a student profile
 - See enrolled courses, GPA, and announcements on a dashboard
 - Change password and notification preferences in settings
+
+## Prerequisites
+
+- A C++ compiler that supports C++17 (`g++` from MinGW-w64, MSYS2, or WSL)
+- Git
