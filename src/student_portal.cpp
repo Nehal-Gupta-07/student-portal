@@ -1,6 +1,7 @@
 #include "portal.h"
 
 #include "console_io.h"
+#include "version.h"
 
 #include <iostream>
 #include <string>
@@ -100,7 +101,7 @@ const Student& Portal::currentStudent() const {
 }
 
 void Portal::printWelcome() const {
-    std::cout << "Welcome to Student Portal\n"
+    std::cout << "Welcome to Student Portal " << kPortalVersion << "\n"
               << "Loaded " << login_.accountCount()
               << " account(s) from the local user store.\n";
     if (login_.isAuthenticated()) {
