@@ -23,3 +23,13 @@ g++ -std=c++17 -o student-portal main.cpp
 ```
 
 This produces `student-portal.exe` on Windows, or `student-portal` on Linux/macOS. Object files and binaries are ignored by Git.
+
+## Run
+
+After a successful build:
+
+```bash
+./student-portal
+```
+
+On Windows Command Prompt you can also run `student-portal.exe`. The program prints a welcome message, greets the user, and shows a sample sum. Later parts replace this with a menu-driven portal.
