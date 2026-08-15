@@ -1,10 +1,11 @@
 #include "help.h"
+#include "version.h"
 
 #include <sstream>
 
 std::string HelpService::formatAbout() const {
     std::ostringstream out;
-    out << "Student Portal\n"
+    out << "Student Portal " << kPortalVersion << "\n"
         << "A command-line academic account manager with login, profile, "
            "dashboard, and settings.\n";
     return out.str();
