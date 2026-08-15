@@ -26,7 +26,7 @@ make
 Or compile directly:
 
 ```bash
-g++ -std=c++17 -Iinclude -o student-portal src/main.cpp src/student.cpp src/student_portal.cpp src/console_io.cpp
+g++ -std=c++17 -Iinclude -o student-portal src/main.cpp src/student.cpp src/student_portal.cpp src/console_io.cpp src/login.cpp
 ```
 
 This produces `student-portal.exe` on Windows, or `student-portal` on Linux/macOS. The `-Iinclude` flag lets source files keep `#include "student.h"` after the header move. Object files and binaries are ignored by Git.
@@ -39,7 +39,10 @@ After a successful build:
 ./student-portal
 ```
 
-On Windows Command Prompt you can also run `student-portal.exe`. The portal loads a sample student record and opens a menu to view or edit profile fields.
+On Windows Command Prompt you can also run `student-portal.exe`. Sign in before viewing or editing a record. Sample accounts created in `users.dat` on first run:
+
+- `nehal` / `portal123`
+- `student` / `student123`
 
 ## Repository layout
 
@@ -48,11 +51,13 @@ student-portal/
   include/
     student.h      Student data model
     portal.h       Portal application class
+    login.h        Session types and user-store login
     console_io.h   Shared console input helpers
   src/
     main.cpp            Program entry point
     student.cpp         Student field validation
     student_portal.cpp  Menu loop and profile actions
+    login.cpp           Credential checks against users.dat
     console_io.cpp      Console input helpers
   Makefile         Build rules
   README.md        Setup and usage guide
