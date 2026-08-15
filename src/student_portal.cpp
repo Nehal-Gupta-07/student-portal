@@ -10,6 +10,7 @@ Portal::Portal()
                "Computer Science", 2),
       profile_(student_) {
     loadProfileForSession();
+    loadSettingsForSession();
 }
 
 void Portal::run() {
@@ -75,6 +76,11 @@ void Portal::run() {
                     dashboardMenu();
                 }
                 break;
+            case 13:
+                if (requireLogin()) {
+                    settingsMenu();
+                }
+                break;
             case 0:
                 running = false;
                 std::cout << "Goodbye.\n";
@@ -120,6 +126,7 @@ void Portal::printMenu() const {
               << "10. Update year\n"
               << "11. Check record validity\n"
               << "12. Dashboard\n"
+              << "13. Settings\n"
               << "0. Exit\n";
 }
 
@@ -158,6 +165,7 @@ void Portal::promptLogin() {
     if (login_.login(credentials)) {
         std::cout << "Signed in as " << login_.session().username << ".\n";
         loadProfileForSession();
+        loadSettingsForSession();
         return;
     }
 
@@ -187,6 +195,13 @@ void Portal::loadProfileForSession() {
     student_.setName(profile_.current().displayName);
     student_.setEmail(profile_.current().email);
     student_.setPhone(profile_.current().phone);
+}
+
+void Portal::loadSettingsForSession() {
+    if (!login_.isAuthenticated()) {
+        return;
+    }
+    settings_.loadForUser(login_.session().username);
 }
 
 void Portal::viewProfile() const {
@@ -380,4 +395,94 @@ void Portal::viewFullDashboard() const {
     viewEnrolledCourses();
     viewGpaSummary();
     viewAnnouncements();
+}
+
+void Portal::settingsMenu() {
+    bool viewing = true;
+    while (viewing) {
+        std::cout << "\n--- Settings ---\n"
+                  << "1. View settings\n"
+                  << "2. Toggle notifications\n"
+                  << "3. Toggle email alerts\n"
+                  << "4. Change theme\n"
+                  << "5. Change password\n"
+                  << "0. Back\n";
+        switch (readMenuChoice()) {
+            case 1:
+                viewSettings();
+                break;
+            case 2:
+                toggleNotifications();
+                break;
+            case 3:
+                toggleEmailAlerts();
+                break;
+            case 4:
+                changeTheme();
+                break;
+            case 5:
+                promptChangePassword();
+                break;
+            case 0:
+                viewing = false;
+                break;
+            default:
+                std::cout << "Unknown choice. Pick a menu number.\n";
+                break;
+        }
+    }
+}
+
+void Portal::viewSettings() const {
+    std::cout << "\n" << settings_.toDisplayString();
+}
+
+void Portal::toggleNotifications() {
+    const bool enabled = settings_.toggleNotifications();
+    std::cout << "Notifications are now " << (enabled ? "on" : "off") << ".\n";
+}
+
+void Portal::toggleEmailAlerts() {
+    const bool enabled = settings_.toggleEmailAlerts();
+    std::cout << "Email alerts are now " << (enabled ? "on" : "off") << ".\n";
+}
+
+void Portal::changeTheme() {
+    const std::string theme = console::readLine("Theme (light/dark): ");
+    if (!settings_.setTheme(theme)) {
+        std::cout << "Theme must be light or dark.\n";
+        return;
+    }
+    std::cout << "Theme set to " << theme << ".\n";
+}
+
+void Portal::promptChangePassword() {
+    const std::string currentPassword = console::readLine("Current password: ");
+    const std::string newPassword = console::readLine("New password (8+ characters): ");
+    const std::string confirmPassword = console::readLine("Confirm new password: ");
+    if (newPassword != confirmPassword) {
+        std::cout << "New password and confirmation do not match.\n";
+        return;
+    }
+
+    switch (login_.changePassword(currentPassword, newPassword)) {
+        case PasswordChangeStatus::Success:
+            std::cout << "Password updated.\n";
+            break;
+        case PasswordChangeStatus::CurrentPasswordIncorrect:
+            std::cout << "Current password is incorrect.\n";
+            break;
+        case PasswordChangeStatus::NewPasswordTooShort:
+            std::cout << "New password must be at least 8 characters.\n";
+            break;
+        case PasswordChangeStatus::NewPasswordSameAsOld:
+            std::cout << "New password must be different from the current password.\n";
+            break;
+        case PasswordChangeStatus::SaveFailed:
+            std::cout << "Could not save the new password.\n";
+            break;
+        case PasswordChangeStatus::NotAuthenticated:
+            std::cout << "Please sign in first.\n";
+            break;
+    }
 }

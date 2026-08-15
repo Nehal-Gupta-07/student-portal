@@ -4,6 +4,7 @@
 #include "dashboard.h"
 #include "login.h"
 #include "profile.h"
+#include "settings.h"
 #include "student.h"
 
 class Portal {
@@ -18,6 +19,7 @@ private:
     LoginService login_;
     ProfileService profile_;
     DashboardService dashboard_;
+    SettingsService settings_;
 
     void printWelcome() const;
     void printMenu() const;
@@ -26,6 +28,7 @@ private:
     void promptLogin();
     void promptLogout();
     void loadProfileForSession();
+    void loadSettingsForSession();
     void viewProfile() const;
     void editProfileMenu();
     void updateProfileName();
@@ -45,6 +48,12 @@ private:
     void viewGpaSummary() const;
     void viewAnnouncements() const;
     void viewFullDashboard() const;
+    void settingsMenu();
+    void viewSettings() const;
+    void toggleNotifications();
+    void toggleEmailAlerts();
+    void changeTheme();
+    void promptChangePassword();
 };
 
 #endif
