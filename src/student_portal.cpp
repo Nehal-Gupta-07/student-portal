@@ -30,35 +30,40 @@ void Portal::run() {
                 break;
             case 4:
                 if (requireLogin()) {
-                    viewStudent();
+                    editProfileMenu();
                 }
                 break;
             case 5:
                 if (requireLogin()) {
-                    updateName();
+                    viewStudent();
                 }
                 break;
             case 6:
                 if (requireLogin()) {
-                    updateEmail();
+                    updateName();
                 }
                 break;
             case 7:
                 if (requireLogin()) {
-                    updatePhone();
+                    updateEmail();
                 }
                 break;
             case 8:
                 if (requireLogin()) {
-                    updateDepartment();
+                    updatePhone();
                 }
                 break;
             case 9:
                 if (requireLogin()) {
-                    updateYear();
+                    updateDepartment();
                 }
                 break;
             case 10:
+                if (requireLogin()) {
+                    updateYear();
+                }
+                break;
+            case 11:
                 if (requireLogin()) {
                     checkValidity();
                 }
@@ -99,13 +104,14 @@ void Portal::printMenu() const {
     std::cout << "1. Sign in\n"
               << "2. Sign out\n"
               << "3. View profile\n"
-              << "4. View student record\n"
-              << "5. Update name\n"
-              << "6. Update email\n"
-              << "7. Update phone\n"
-              << "8. Update department\n"
-              << "9. Update year\n"
-              << "10. Check record validity\n"
+              << "4. Edit profile\n"
+              << "5. View student record\n"
+              << "6. Update name\n"
+              << "7. Update email\n"
+              << "8. Update phone\n"
+              << "9. Update department\n"
+              << "10. Update year\n"
+              << "11. Check record validity\n"
               << "0. Exit\n";
 }
 
@@ -167,6 +173,88 @@ void Portal::promptLogout() {
 void Portal::viewProfile() const {
     std::cout << "\n--- Student Profile ---\n"
               << profile_.toDisplayString() << "\n";
+}
+
+void Portal::editProfileMenu() {
+    bool editing = true;
+    while (editing) {
+        std::cout << "\n--- Edit Profile ---\n"
+                  << "1. Display name\n"
+                  << "2. Email\n"
+                  << "3. Phone\n"
+                  << "4. Address\n"
+                  << "5. Bio\n"
+                  << "0. Back\n";
+        switch (readMenuChoice()) {
+            case 1:
+                updateProfileName();
+                break;
+            case 2:
+                updateProfileEmail();
+                break;
+            case 3:
+                updateProfilePhone();
+                break;
+            case 4:
+                updateProfileAddress();
+                break;
+            case 5:
+                updateProfileBio();
+                break;
+            case 0:
+                editing = false;
+                break;
+            default:
+                std::cout << "Unknown choice. Pick a menu number.\n";
+                break;
+        }
+    }
+}
+
+void Portal::updateProfileName() {
+    const std::string name = console::readLine("New display name: ");
+    if (!profile_.setDisplayName(name)) {
+        std::cout << "Display name cannot be empty.\n";
+        return;
+    }
+    student_.setName(name);
+    std::cout << "Display name updated.\n";
+}
+
+void Portal::updateProfileEmail() {
+    const std::string email = console::readLine("New email: ");
+    if (!profile_.setEmail(email)) {
+        std::cout << "Email cannot be empty.\n";
+        return;
+    }
+    student_.setEmail(email);
+    std::cout << "Email updated.\n";
+}
+
+void Portal::updateProfilePhone() {
+    const std::string phone = console::readLine("New phone: ");
+    if (!profile_.setPhone(phone)) {
+        std::cout << "Phone cannot be empty.\n";
+        return;
+    }
+    student_.setPhone(phone);
+    std::cout << "Phone updated.\n";
+}
+
+void Portal::updateProfileAddress() {
+    if (!profile_.setAddress(console::readLine("New address: "))) {
+        std::cout << "Address cannot be empty.\n";
+    } else {
+        std::cout << "Address updated.\n";
+    }
+}
+
+void Portal::updateProfileBio() {
+    if (!profile_.setBio(console::readLine("New bio: "))) {
+        std::cout << "Bio cannot be empty.\n";
+    } else {
+        std::cout << "Bio updated.\n";
+    }
 }
 
 void Portal::viewStudent() const {

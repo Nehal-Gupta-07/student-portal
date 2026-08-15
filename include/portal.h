@@ -24,6 +24,12 @@ private:
     void promptLogin();
     void promptLogout();
     void viewProfile() const;
+    void editProfileMenu();
+    void updateProfileName();
+    void updateProfileEmail();
+    void updateProfilePhone();
+    void updateProfileAddress();
+    void updateProfileBio();
     void viewStudent() const;
     void updateName();
     void updateEmail();
