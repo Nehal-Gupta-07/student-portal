@@ -20,6 +20,24 @@ void SettingsService::applyDefaults(const std::string& username) {
     settings_ = defaultRecord(username);
 }
 
+bool SettingsService::toggleNotifications() {
+    settings_.notificationsEnabled = !settings_.notificationsEnabled;
+    return settings_.notificationsEnabled;
+}
+
+bool SettingsService::toggleEmailAlerts() {
+    settings_.emailAlertsEnabled = !settings_.emailAlertsEnabled;
+    return settings_.emailAlertsEnabled;
+}
+
+bool SettingsService::setTheme(const std::string& theme) {
+    if (theme != "light" && theme != "dark") {
+        return false;
+    }
+    settings_.theme = theme;
+    return true;
+}
+
 std::string SettingsService::toDisplayString() const {
     std::ostringstream out;
     out << "Username: " << (settings_.username.empty() ? "(not signed in)"

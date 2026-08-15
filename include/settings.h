@@ -19,6 +19,9 @@ public:
 
     const SettingsRecord& current() const;
     void applyDefaults(const std::string& username);
+    bool toggleNotifications();
+    bool toggleEmailAlerts();
+    bool setTheme(const std::string& theme);
     std::string toDisplayString() const;
 
 private:
