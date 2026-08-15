@@ -75,8 +75,12 @@ const Student& Portal::currentStudent() const {
 void Portal::printWelcome() const {
     std::cout << "Welcome to Student Portal\n"
               << "Loaded " << login_.accountCount()
-              << " account(s) from the local user store.\n"
-              << "Sign in before viewing or editing a student record.\n";
+              << " account(s) from the local user store.\n";
+    if (login_.isAuthenticated()) {
+        std::cout << "Restored session for " << login_.session().username << ".\n";
+    } else {
+        std::cout << "Sign in before viewing or editing a student record.\n";
+    }
 }
 
 void Portal::printMenu() const {

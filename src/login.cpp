@@ -4,9 +4,11 @@
 #include <sstream>
 
 const char* LoginService::kUserStorePath = "users.dat";
+const char* LoginService::kSessionPath = "session.dat";
 
 LoginService::LoginService() : session_{false, "", 0}, failedAttempts_(0) {
     loadUserStore();
+    loadSession();
 }
 
 bool LoginService::login(const Credentials& credentials) {
@@ -30,11 +32,13 @@ bool LoginService::login(const Credentials& credentials) {
     session_.username = account->username;
     session_.studentId = account->studentId;
     failedAttempts_ = 0;
+    saveSession();
     return true;
 }
 
 void LoginService::logout() {
     session_ = Session{false, "", 0};
+    clearSessionFile();
 }
 
 bool LoginService::isAuthenticated() const {
@@ -99,6 +103,47 @@ bool LoginService::saveUserStore() const {
         out << account.username << ' ' << account.password << ' '
             << account.studentId << '\n';
     }
+    return static_cast<bool>(out);
+}
+
+void LoginService::loadSession() {
+    session_ = Session{false, "", 0};
+    std::ifstream in(kSessionPath);
+    if (!in) {
+        return;
+    }
+
+    std::string username;
+    int studentId = 0;
+    if (!(in >> username >> studentId) || username.empty()) {
+        return;
+    }
+
+    const UserAccount* account = findAccount(username);
+    if (account == nullptr || account->studentId != studentId) {
+        clearSessionFile();
+        return;
+    }
+
+    session_.authenticated = true;
+    session_.username = account->username;
+    session_.studentId = account->studentId;
+}
+
+bool LoginService::saveSession() const {
+    if (!session_.authenticated) {
+        return clearSessionFile();
+    }
+    std::ofstream out(kSessionPath);
+    if (!out) {
+        return false;
+    }
+    out << session_.username << ' ' << session_.studentId << '\n';
+    return static_cast<bool>(out);
+}
+
+bool LoginService::clearSessionFile() const {
+    std::ofstream out(kSessionPath, std::ios::trunc);
     return static_cast<bool>(out);
 }
 

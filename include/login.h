@@ -25,6 +25,7 @@ class LoginService {
 public:
     static const int kMaxFailedAttempts = 3;
     static const char* kUserStorePath;
+    static const char* kSessionPath;
 
     LoginService();
 
@@ -45,6 +46,9 @@ private:
     void loadUserStore();
     void seedDefaultAccounts();
     bool saveUserStore() const;
+    void loadSession();
+    bool saveSession() const;
+    bool clearSessionFile() const;
     const UserAccount* findAccount(const std::string& username) const;
     static bool hasNonEmptyFields(const Credentials& credentials);
 };
