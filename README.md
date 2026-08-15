@@ -8,6 +8,7 @@ Student Portal is a command-line C++ application for managing a student's academ
 - View and edit a student profile
 - See enrolled courses, GPA, and announcements on a dashboard
 - Change password and notification preferences in settings
+- Open Help for an about blurb and a command list
 
 ## Prerequisites
 
@@ -26,7 +27,7 @@ make
 Or compile directly:
 
 ```bash
-g++ -std=c++17 -Iinclude -o student-portal src/main.cpp src/student.cpp src/student_portal.cpp src/console_io.cpp src/login.cpp src/profile.cpp src/dashboard.cpp src/settings.cpp
+g++ -std=c++17 -Iinclude -o student-portal src/main.cpp src/student.cpp src/student_portal.cpp src/console_io.cpp src/login.cpp src/profile.cpp src/dashboard.cpp src/settings.cpp src/help.cpp
 ```
 
 This produces `student-portal.exe` on Windows, or `student-portal` on Linux/macOS. The `-Iinclude` flag lets source files keep `#include "student.h"` after the header move. Object files and binaries are ignored by Git.
@@ -57,6 +58,7 @@ student-portal/
     profile.h      Profile records and field validation
     dashboard.h    Courses, GPA, and announcements
     settings.h     Notifications, theme, and password change
+    help.h         About text and command list
     console_io.h   Shared console input helpers
   src/
     main.cpp            Program entry point
@@ -66,6 +68,7 @@ student-portal/
     profile.cpp         Profile load/save and validation
     dashboard.cpp       Enrollment list, GPA, and announcements
     settings.cpp        Settings persistence and toggles
+    help.cpp            Help about and command list
     console_io.cpp      Console input helpers
   Makefile         Build rules
   README.md        Setup and usage guide

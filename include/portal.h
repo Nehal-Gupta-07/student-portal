@@ -2,6 +2,7 @@
 #define PORTAL_H
 
 #include "dashboard.h"
+#include "help.h"
 #include "login.h"
 #include "profile.h"
 #include "settings.h"
@@ -20,6 +21,7 @@ private:
     ProfileService profile_;
     DashboardService dashboard_;
     SettingsService settings_;
+    HelpService help_;
 
     void printWelcome() const;
     void printMenu() const;
@@ -54,6 +56,7 @@ private:
     void toggleEmailAlerts();
     void changeTheme();
     void promptChangePassword();
+    void showHelp() const;
 };
 
 #endif

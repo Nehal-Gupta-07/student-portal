@@ -81,6 +81,9 @@ void Portal::run() {
                     settingsMenu();
                 }
                 break;
+            case 14:
+                showHelp();
+                break;
             case 0:
                 running = false;
                 std::cout << "Goodbye.\n";
@@ -127,6 +130,7 @@ void Portal::printMenu() const {
               << "11. Check record validity\n"
               << "12. Dashboard\n"
               << "13. Settings\n"
+              << "14. Help\n"
               << "0. Exit\n";
 }
 
@@ -485,4 +489,10 @@ void Portal::promptChangePassword() {
             std::cout << "Please sign in first.\n";
             break;
     }
+}
+
+void Portal::showHelp() const {
+    std::cout << "\n--- Help ---\n"
+              << help_.formatAbout() << "\n"
+              << help_.formatCommandList();
 }
