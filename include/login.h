@@ -21,6 +21,15 @@ struct UserAccount {
     int studentId;
 };
 
+enum class PasswordChangeStatus {
+    Success,
+    NotAuthenticated,
+    CurrentPasswordIncorrect,
+    NewPasswordTooShort,
+    NewPasswordSameAsOld,
+    SaveFailed
+};
+
 class LoginService {
 public:
     static const int kMaxFailedAttempts = 3;
@@ -38,6 +47,9 @@ public:
     int remainingAttempts() const;
     const Session& session() const;
     std::size_t accountCount() const;
+    PasswordChangeStatus changePassword(const std::string& currentPassword,
+                                        const std::string& newPassword);
+    static bool isValidNewPassword(const std::string& password);
 
 private:
     Session session_;
@@ -51,6 +63,7 @@ private:
     bool saveSession() const;
     bool clearSessionFile() const;
     const UserAccount* findAccount(const std::string& username) const;
+    UserAccount* findAccount(const std::string& username);
     static bool hasNonEmptyFields(const Credentials& credentials);
 };
 

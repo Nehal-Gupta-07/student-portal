@@ -68,6 +68,32 @@ std::size_t LoginService::accountCount() const {
     return accounts_.size();
 }
 
+bool LoginService::isValidNewPassword(const std::string& password) {
+    return password.size() >= 8;
+}
+
+PasswordChangeStatus LoginService::changePassword(
+    const std::string& currentPassword, const std::string& newPassword) {
+    if (!isAuthenticated()) {
+        return PasswordChangeStatus::NotAuthenticated;
+    }
+    UserAccount* account = findAccount(session_.username);
+    if (account == nullptr || account->password != currentPassword) {
+        return PasswordChangeStatus::CurrentPasswordIncorrect;
+    }
+    if (!isValidNewPassword(newPassword)) {
+        return PasswordChangeStatus::NewPasswordTooShort;
+    }
+    if (newPassword == currentPassword) {
+        return PasswordChangeStatus::NewPasswordSameAsOld;
+    }
+    account->password = newPassword;
+    if (!saveUserStore()) {
+        return PasswordChangeStatus::SaveFailed;
+    }
+    return PasswordChangeStatus::Success;
+}
+
 void LoginService::loadUserStore() {
     accounts_.clear();
     std::ifstream in(kUserStorePath);
@@ -156,6 +182,15 @@ bool LoginService::clearSessionFile() const {
 
 const UserAccount* LoginService::findAccount(const std::string& username) const {
     for (const UserAccount& account : accounts_) {
+        if (account.username == username) {
+            return &account;
+        }
+    }
+    return nullptr;
+}
+
+UserAccount* LoginService::findAccount(const std::string& username) {
+    for (UserAccount& account : accounts_) {
         if (account.username == username) {
             return &account;
         }
