@@ -7,7 +7,10 @@
 
 Portal::Portal()
     : student_(1001, "Nehal Kumar", "nehal.kumar@university.edu", "9876543210",
-               "Computer Science", 2) {}
+               "Computer Science", 2),
+      profile_(student_) {
+    loadProfileForSession();
+}
 
 void Portal::run() {
     printWelcome();
@@ -24,35 +27,45 @@ void Portal::run() {
                 break;
             case 3:
                 if (requireLogin()) {
-                    viewStudent();
+                    viewProfile();
                 }
                 break;
             case 4:
                 if (requireLogin()) {
-                    updateName();
+                    editProfileMenu();
                 }
                 break;
             case 5:
                 if (requireLogin()) {
-                    updateEmail();
+                    viewStudent();
                 }
                 break;
             case 6:
                 if (requireLogin()) {
-                    updatePhone();
+                    updateName();
                 }
                 break;
             case 7:
                 if (requireLogin()) {
-                    updateDepartment();
+                    updateEmail();
                 }
                 break;
             case 8:
                 if (requireLogin()) {
-                    updateYear();
+                    updatePhone();
                 }
                 break;
             case 9:
+                if (requireLogin()) {
+                    updateDepartment();
+                }
+                break;
+            case 10:
+                if (requireLogin()) {
+                    updateYear();
+                }
+                break;
+            case 11:
                 if (requireLogin()) {
                     checkValidity();
                 }
@@ -92,13 +105,15 @@ void Portal::printMenu() const {
     }
     std::cout << "1. Sign in\n"
               << "2. Sign out\n"
-              << "3. View student record\n"
-              << "4. Update name\n"
-              << "5. Update email\n"
-              << "6. Update phone\n"
-              << "7. Update department\n"
-              << "8. Update year\n"
-              << "9. Check record validity\n"
+              << "3. View profile\n"
+              << "4. Edit profile\n"
+              << "5. View student record\n"
+              << "6. Update name\n"
+              << "7. Update email\n"
+              << "8. Update phone\n"
+              << "9. Update department\n"
+              << "10. Update year\n"
+              << "11. Check record validity\n"
               << "0. Exit\n";
 }
 
@@ -136,6 +151,7 @@ void Portal::promptLogin() {
 
     if (login_.login(credentials)) {
         std::cout << "Signed in as " << login_.session().username << ".\n";
+        loadProfileForSession();
         return;
     }
 
@@ -155,6 +171,103 @@ void Portal::promptLogout() {
     }
     login_.logout();
     std::cout << "Signed out.\n";
+}
+
+void Portal::loadProfileForSession() {
+    if (!login_.isAuthenticated()) {
+        return;
+    }
+    profile_.ensureProfile(login_.session().studentId, student_);
+    student_.setName(profile_.current().displayName);
+    student_.setEmail(profile_.current().email);
+    student_.setPhone(profile_.current().phone);
+}
+
+void Portal::viewProfile() const {
+    std::cout << "\n--- Student Profile ---\n"
+              << profile_.toDisplayString() << "\n";
+}
+
+void Portal::editProfileMenu() {
+    bool editing = true;
+    while (editing) {
+        std::cout << "\n--- Edit Profile ---\n"
+                  << "1. Display name\n"
+                  << "2. Email\n"
+                  << "3. Phone\n"
+                  << "4. Address\n"
+                  << "5. Bio\n"
+                  << "0. Back\n";
+        switch (readMenuChoice()) {
+            case 1:
+                updateProfileName();
+                break;
+            case 2:
+                updateProfileEmail();
+                break;
+            case 3:
+                updateProfilePhone();
+                break;
+            case 4:
+                updateProfileAddress();
+                break;
+            case 5:
+                updateProfileBio();
+                break;
+            case 0:
+                editing = false;
+                break;
+            default:
+                std::cout << "Unknown choice. Pick a menu number.\n";
+                break;
+        }
+    }
+}
+
+void Portal::updateProfileName() {
+    const std::string name = console::readLine("New display name: ");
+    if (!profile_.setDisplayName(name)) {
+        std::cout << "Display name must be at least 2 characters and not only spaces.\n";
+        return;
+    }
+    student_.setName(name);
+    std::cout << "Display name updated.\n";
+}
+
+void Portal::updateProfileEmail() {
+    const std::string email = console::readLine("New email: ");
+    if (!profile_.setEmail(email)) {
+        std::cout << "Email must look like name@domain.tld\n";
+        return;
+    }
+    student_.setEmail(email);
+    std::cout << "Email updated.\n";
+}
+
+void Portal::updateProfilePhone() {
+    const std::string phone = console::readLine("New phone: ");
+    if (!profile_.setPhone(phone)) {
+        std::cout << "Phone must have at least 10 digits.\n";
+        return;
+    }
+    student_.setPhone(phone);
+    std::cout << "Phone updated.\n";
+}
+
+void Portal::updateProfileAddress() {
+    if (!profile_.setAddress(console::readLine("New address: "))) {
+        std::cout << "Address must be at least 5 characters.\n";
+    } else {
+        std::cout << "Address updated.\n";
+    }
+}
+
+void Portal::updateProfileBio() {
+    if (!profile_.setBio(console::readLine("New bio: "))) {
+        std::cout << "Bio must be between 10 and 280 characters.\n";
+    } else {
+        std::cout << "Bio updated.\n";
+    }
 }
 
 void Portal::viewStudent() const {

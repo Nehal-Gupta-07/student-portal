@@ -26,7 +26,7 @@ make
 Or compile directly:
 
 ```bash
-g++ -std=c++17 -Iinclude -o student-portal src/main.cpp src/student.cpp src/student_portal.cpp src/console_io.cpp src/login.cpp
+g++ -std=c++17 -Iinclude -o student-portal src/main.cpp src/student.cpp src/student_portal.cpp src/console_io.cpp src/login.cpp src/profile.cpp
 ```
 
 This produces `student-portal.exe` on Windows, or `student-portal` on Linux/macOS. The `-Iinclude` flag lets source files keep `#include "student.h"` after the header move. Object files and binaries are ignored by Git.
@@ -54,12 +54,14 @@ student-portal/
     student.h      Student data model
     portal.h       Portal application class
     login.h        Session types and user-store login
+    profile.h      Profile records and field validation
     console_io.h   Shared console input helpers
   src/
     main.cpp            Program entry point
     student.cpp         Student field validation
     student_portal.cpp  Menu loop and profile actions
     login.cpp           Credential checks against users.dat
+    profile.cpp         Profile load/save and validation
     console_io.cpp      Console input helpers
   Makefile         Build rules
   README.md        Setup and usage guide
